@@ -26,7 +26,7 @@
 ### Tech Stack <a name="tech-stack"></a>
 
 <details>
-<summary>OOP School Library app built with Ruby</summary>
+<summary>Oop School Library app built with Ruby</summary>
   <ul>
     <li><a href="https://www.ruby-lang.org/en/">PostgreSQL</a></li>
   </ul>
@@ -52,26 +52,26 @@ In order to run this project you need:
 
 Clone this repository to your desired folder:
 
-- git clone https://github.com/Uthmanbello/OOP-school-library
-- cd OOP-school-library
+- git clone https://github.com/yayaismaail/oop-school-library.git
+- cd oop-school-library
 - code . <!-- If you are using VS Code -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## 👥 Author <a name="authors"></a>
+## 👥 Authors <a name="authors"></a>
 
-👤 **Uthman Igein Bello-Imoukhuede**
+👤 **Ismail Halliru Muhammad**
 
-- GitHub: [Uthmanbello](https://github.com/Uthmanbello)
-- Twitter: [@UthmanDeRoyale](https://twitter.com/UthmanDeRoyale)
-- LinkedIn: [Uthman Igein Bello-Imoukhuede](linkedin.com/in/uthmanbelloimoukhuede)
+- GitHub: [@githubhandle](https://github.com/yayaismaail)
+- Twitter: [@twitterhandle](https://mobile.twitter.com/IsmailhalliruM1)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/ismail-halliru-muhammad-2a8453127/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- [Add new books class] 
-- [Save records of who borrowed a book and when] 
+- [ ] **[Add new books class]**
+- [ ] **[Save records of who borrowed a book and when]**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -79,7 +79,7 @@ Clone this repository to your desired folder:
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/Uthmanbello/OOP-school-library/issues).
+Feel free to check the [issues page](https://github.com/yayaismaail/oop-school-library/issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -95,10 +95,8 @@ I would like to thank my colleagues at Microverse for their support during the p
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## 📝 License <a name="license"></a>
 
-This project is [MIT](https://github.com/Uthmanbello/OOP-school-library/blob/dev/LICENSE) licensed.
+This project is [MIT](https://github.com/yayaismaail/oop-school-library/blob/development/LICENSE) licensed.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
