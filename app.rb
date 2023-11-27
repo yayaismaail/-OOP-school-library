@@ -7,17 +7,21 @@ require './menu'
 require './lister'
 class App
   attr_accessor :books, :rentals, :people, :student, :teacher
+
   def initialize
     @books = []
     @people = []
     @rentals = []
   end
+
   def list_books
     Lister.new(@books).list_books
   end
+
   def list_people
     Lister.new(@people).list_people
   end
+
   def create_person
     person_type = person_type_input
     if person_type == 1
@@ -31,10 +35,12 @@ class App
     push_person_to_list(person)
     puts 'Person created successfully'
   end
+
   def person_type_input
     puts 'Do you want to create a student (1) or a teacher (2)? [Input the number]:'
     gets.chomp.to_i
   end
+
   def create_student
     puts 'Age:'
     age = gets.chomp
@@ -46,6 +52,7 @@ class App
     classroom = gets.chomp
     Student.new(age, name, parent_permission, classroom)
   end
+
   def create_teacher
     puts 'Age:'
     age = gets.chomp
@@ -57,9 +64,11 @@ class App
     specialization = gets.chomp
     Teacher.new(age, name, parent_permission, specialization)
   end
+
   def push_person_to_list(person)
     @people.push(person)
   end
+
   def create_book
     puts 'Title:'
     title = gets.chomp
@@ -69,6 +78,7 @@ class App
     @books.push(book)
     puts 'Book created successfully'
   end
+
   def create_rental
     puts 'Select a book from the following list by number:'
     @books.each_with_index do |book, index|
@@ -86,6 +96,7 @@ class App
     @rentals.push(rental)
     puts 'Rental created successfully'
   end
+
   def list_rentals_for_person
     puts 'ID of person:'
     person_id = gets.chomp.to_i
