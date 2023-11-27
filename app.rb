@@ -3,7 +3,8 @@ require './rental'
 require './person'
 require './student'
 require './teacher'
-
+require './menu'
+require './lister'
 class App
   attr_accessor :books, :rentals, :people, :student, :teacher
 
@@ -14,15 +15,11 @@ class App
   end
 
   def list_books
-    @books.each do |book|
-      puts "Title: #{book.title}, Author: #{book.author}"
-    end
+    Lister.new(@books).list_books
   end
 
   def list_people
-    @people.each do |person|
-      puts "[#{person.class.name}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-    end
+    Lister.new(@people).list_people
   end
 
   def create_person
@@ -46,19 +43,19 @@ class App
 
   def create_student
     puts 'Age:'
-    age = gets.chomp.to_i
+    age = gets.chomp
     puts 'Name:'
     name = gets.chomp
     puts 'Has Parent Permission? [Y/N]:'
     parent_permission = gets.chomp.downcase == 'y'
-    print 'classroom: '
+    puts 'classroom: '
     classroom = gets.chomp
     Student.new(age, name, parent_permission, classroom)
   end
 
   def create_teacher
     puts 'Age:'
-    age = gets.chomp.to_i
+    age = gets.chomp
     puts 'Name:'
     name = gets.chomp
     puts 'Has Parent Permission? [Y/N]:'
@@ -88,16 +85,13 @@ class App
       puts "#{index}) Title: #{book.title}, Author: #{book.author}"
     end
     book = gets.chomp.to_i
-
     puts 'Select a person from the following list by number (not id):'
     @people.each_with_index do |person, index|
       puts "#{index}) [#{person.class.name}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
     end
     person = gets.chomp.to_i
-
     puts 'Date (YYYY-MM-DD):'
     date = Date.parse(gets.chomp)
-
     rental = Rental.new(date, @books[book], @people[person])
     @rentals.push(rental)
     puts 'Rental created successfully'
@@ -108,10 +102,7 @@ class App
     person_id = gets.chomp.to_i
     rentals = @rentals.select { |rental| rental.person.id == person_id }
     puts 'Rentals:'
-    rentals.each do |rental|
-      puts "Date: #{rental.date}, Book: '#{rental.book.title}' by #{rental.book.author}"
-    end
+    Lister.new(rentals).list_rentals
   end
-
   private :push_person_to_list, :create_teacher, :create_student, :person_type_input
 end
