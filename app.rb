@@ -3,6 +3,8 @@ require './rental'
 require './person'
 require './student'
 require './teacher'
+require './menu'
+require './lister'
 
 class App
   attr_accessor :books, :rentals, :people, :student, :teacher
@@ -14,15 +16,11 @@ class App
   end
 
   def list_books
-    @books.each do |book|
-      puts "Title: #{book.title}, Author: #{book.author}"
-    end
+    Lister.new(@books).list_books
   end
 
   def list_people
-    @people.each do |person|
-      puts "[#{person.class.name}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-    end
+    Lister.new(@people).list_people
   end
 
   def create_person
@@ -46,26 +44,22 @@ class App
 
   def create_student
     puts 'Age:'
-    age = gets.chomp.to_i
+    age = gets.chomp
     puts 'Name:'
     name = gets.chomp
     puts 'Has Parent Permission? [Y/N]:'
     parent_permission = gets.chomp.downcase == 'y'
-    print 'classroom: '
-    classroom = gets.chomp
-    Student.new(age, name, parent_permission, classroom)
+    Student.new(age, name, parent_permission)
   end
 
   def create_teacher
     puts 'Age:'
-    age = gets.chomp.to_i
+    age = gets.chomp
     puts 'Name:'
     name = gets.chomp
-    puts 'Has Parent Permission? [Y/N]:'
-    parent_permission = gets.chomp.downcase == 'y'
     puts 'Specialization:'
     specialization = gets.chomp
-    Teacher.new(age, name, parent_permission, specialization)
+    Teacher.new(age, name, specialization)
   end
 
   def push_person_to_list(person)
@@ -108,9 +102,7 @@ class App
     person_id = gets.chomp.to_i
     rentals = @rentals.select { |rental| rental.person.id == person_id }
     puts 'Rentals:'
-    rentals.each do |rental|
-      puts "Date: #{rental.date}, Book: '#{rental.book.title}' by #{rental.book.author}"
-    end
+    Lister.new(rentals).list_rentals
   end
 
   private :push_person_to_list, :create_teacher, :create_student, :person_type_input
