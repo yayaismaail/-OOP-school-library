@@ -65,6 +65,11 @@ Clone this repository to your desired folder:
 - GitHub: [@githubhandle](https://github.com/yayaismaail)
 - Twitter: [@twitterhandle](https://mobile.twitter.com/IsmailhalliruM1)
 - LinkedIn: [LinkedIn](https://www.linkedin.com/in/ismail-halliru-muhammad-2a8453127/)
+👤 **Esmatullah Qadeemi**
+
+- GitHub: [@githubhandle](https://github.com/Esmatullah12)
+- Twitter: [@twitterhandle](https://twitter.com/Esmatullah173)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/esmatullah-qadeemi-b9951821b/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
