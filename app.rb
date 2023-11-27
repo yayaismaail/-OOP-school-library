@@ -49,7 +49,9 @@ class App
     name = gets.chomp
     puts 'Has Parent Permission? [Y/N]:'
     parent_permission = gets.chomp.downcase == 'y'
-    Student.new(age, name, parent_permission)
+    puts 'classroom: '
+    classroom = gets.chomp
+    Student.new(age, name, parent_permission, classroom)
   end
 
   def create_teacher
@@ -57,9 +59,11 @@ class App
     age = gets.chomp
     puts 'Name:'
     name = gets.chomp
+    puts 'Has Parent Permission? [Y/N]:'
+    parent_permission = gets.chomp.downcase == 'y'
     puts 'Specialization:'
     specialization = gets.chomp
-    Teacher.new(age, name, specialization)
+    Teacher.new(age, name, parent_permission, specialization)
   end
 
   def push_person_to_list(person)
