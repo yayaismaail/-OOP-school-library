@@ -24,11 +24,10 @@ class Menu
 
     if menu.key?(option)
       app.send(menu[option])
-      return true if menu[option] == :exit
+      return true if menu[option] == :exit_program
     else
       puts 'Invalid option.'
     end
-
     false
   end
 end

@@ -13,6 +13,6 @@ class Teacher < Person
   end
 
   def to_hash
-    {title: @title, author: @author}
+    super.merge(specialization: @specialization, class_name: 'Teacher')
   end
 end

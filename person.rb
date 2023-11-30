@@ -26,6 +26,15 @@ class Person < Nameable
     Rental.new(date, book, self)
   end
 
+  def to_hash
+    {
+      id: @id,
+      name: @name,
+      age: @age,
+      parent_permission: @parent_permission
+    }
+  end
+
   private
 
   def of_age?

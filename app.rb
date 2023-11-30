@@ -1,69 +1,22 @@
 require_relative 'storage'
 require_relative 'book'
-require './rental'
-require './person'
-require './student'
-require './teacher'
-require './menu'
-require './lister'
-require 'json'
+require_relative 'rental'
+require_relative 'person'
+require_relative 'student'
+require_relative 'teacher'
+require_relative 'menu'
+require_relative 'lister'
 
 class App
-  attr_accessor :books, :rentals, :people, :student, :teacher
 
   def initialize
     @save_book = SaveData.new('data/book.json')
+    @save_person = SaveData.new('data/people.json')
+    @save_rentals = SaveData.new('data/rentals.json')
     r = Rentals.new
     @books = load_books || []
-    @people = add_people || []
-    @rentals = r.add_rentals || []
-  end
-
-  def preserve_person
-    people_ojects = []
-    @people.each do |people|
-      people_ojects << if people.instance_of?(::Student)
-                         { age: people.age, classroom: people.classroom, name: people.name, id: people.id,
-                           parent_permission: people.parent_permission, type: people.class.name }
-                       else
-                         { age: people.age, id: people.id, specialization: people.specialization, name: people.name,
-                           type: people.class.name }
-                       end
-    end
-    File.write('people.json', people_ojects.to_json)
-  end
-
-  def add_people
-    people = []
-    if File.exist?('people.json') && !File.empty?('people.json')
-      data = JSON.parse(File.read('people.json'))
-      data.each do |person|
-        if person['type'] == 'Student'
-          student = Student.new(person['age'], person['name'], person['classroom'])
-          student.id = person['id']
-          people << student
-        else
-          teacher = Teacher.new(person['age'], person['name'], person['specialization'])
-          teacher.id = person['id']
-          people << teacher
-        end
-      end
-    end
-    people
-  end
-
-  def preserve_rental
-    rental_objects = @rentals.map do |rental|
-      book_obj = { title: rental.book.title, author: rental.book.author }
-      person_data = { age: rental.person.age, name: rental.person.name, id: rental.person.id }
-      if rental.person.is_a?(Student)
-        person_data[:classroom] = rental.person.classroom
-      else
-        person_data[:specialization] = rental.person.specialization
-      end
-      { date: rental.date, book: book_obj, person: person_data }
-    end
-    File.write('rentals.json', rental_objects.to_json)
+    @people = load_people || []
+    @rentals = load_rentals || []
   end
 
   def list_books
@@ -85,7 +38,6 @@ class App
       return
     end
     push_person_to_list(person)
-    preserve_person
     puts 'Person created successfully'
   end
 
@@ -146,7 +98,6 @@ class App
 
     rental = Rental.new(date, @books[book], @people[person])
     @rentals.push(rental)
-    preserve_rental
     puts 'Rental created successfully'
   end
 
@@ -168,8 +119,18 @@ class App
     books_data.map { |book| Book.new(book['title'], book['author']) }
   end
 
+  def save_person
+    @save_person.save_data(@people.map(&:to_hash))
+  end
+
+  def save_rentals
+    @save_rentals.save_data(@rentals.map(&:to_hash))
+  end
+
   def exit_program 
     save_book
+    save_person
+    save_rentals
     puts "Thanks for using the application"
   end
 
