@@ -1,4 +1,5 @@
-require './book'
+require_relative 'storage'
+require_relative 'book'
 require './rental'
 require './person'
 require './student'
@@ -11,30 +12,13 @@ class App
   attr_accessor :books, :rentals, :people, :student, :teacher
 
   def initialize
+    @save_book = SaveData.new('data/book.json')
     r = Rentals.new
-    @books = add_books || []
+    @books = load_books || []
     @people = add_people || []
     @rentals = r.add_rentals || []
   end
 
-  # persrve books data into books.json file
-  def preseve_book
-    puts 'Preserve the books'
-    books_ojects = []
-    @books.each { |book| books_ojects << { title: book.title, author: book.author } }
-    File.write('books.json', books_ojects.to_json)
-  end
-
-  def add_books
-    books = []
-    if File.exist?('books.json') && !File.empty?('books.json')
-      data = JSON.parse(File.read('books.json'))
-      data.each { |book| books << Book.new(book['title'], book['author']) }
-    end
-    books
-  end
-
-  # preserve person data into people.json file
   def preserve_person
     people_ojects = []
     @people.each do |people|
@@ -141,7 +125,6 @@ class App
     author = gets.chomp
     book = Book.new(title, author)
     @books.push(book)
-    preseve_book
     puts 'Book created successfully'
   end
 
@@ -173,6 +156,21 @@ class App
     rentals = @rentals.select { |rental| rental.person.id == person_id }
     puts 'Rentals:'
     Lister.new(rentals).list_rentals
+  end
+
+  def save_book
+    @save_book.save_data(@books.map(&:to_hash))
+  end
+
+  def load_books
+    books_data = @save_book.load_data
+    return nil if books_data.nil?
+    books_data.map { |book| Book.new(book['title'], book['author']) }
+  end
+
+  def exit_program 
+    save_book
+    puts "Thanks for using the application"
   end
 
   private :push_person_to_list, :create_teacher, :create_student, :person_type_input

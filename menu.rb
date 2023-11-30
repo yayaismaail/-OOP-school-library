@@ -19,7 +19,7 @@ class Menu
       4 => :create_book,
       5 => :create_rental,
       6 => :list_rentals_for_person,
-      7 => :exit
+      7 => :exit_program
     }
 
     if menu.key?(option)

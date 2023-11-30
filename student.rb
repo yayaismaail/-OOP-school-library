@@ -17,4 +17,8 @@ class Student < Person
   def play_hooky
     '¯(ツ)/¯'
   end
+
+  def to_hash
+    {title: @title, author: @author}
+  end
 end
