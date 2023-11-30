@@ -4,7 +4,7 @@ require './app'
 def main
   app = App.new
   menu = Menu.new
-
+  # display menu for the user
   loop do
     menu.display_menu
     option = gets.chomp.to_i
