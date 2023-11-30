@@ -8,12 +8,10 @@ require_relative 'menu'
 require_relative 'lister'
 
 class App
-
   def initialize
     @save_book = SaveData.new('data/book.json')
     @save_person = SaveData.new('data/people.json')
     @save_rentals = SaveData.new('data/rentals.json')
-    r = Rentals.new
     @books = load_books || []
     @people = load_people || []
     @rentals = load_rentals || []
@@ -116,6 +114,7 @@ class App
   def load_books
     books_data = @save_book.load_data
     return nil if books_data.nil?
+
     books_data.map { |book| Book.new(book['title'], book['author']) }
   end
 
@@ -127,11 +126,11 @@ class App
     @save_rentals.save_data(@rentals.map(&:to_hash))
   end
 
-  def exit_program 
+  def exit_program
     save_book
     save_person
     save_rentals
-    puts "Thanks for using the application"
+    puts 'Thanks for using the application'
   end
 
   private :push_person_to_list, :create_teacher, :create_student, :person_type_input
