@@ -33,6 +33,7 @@
 </details>
 
 ### Key Features <a name="key-features"></a>
+ - saving the data into a json file
 
 - **Has 3 functions**
 

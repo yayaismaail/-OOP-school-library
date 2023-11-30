@@ -17,6 +17,7 @@ class App
     @rentals = r.add_rentals || []
   end
 
+  # persrve books data into books.json file
   def preseve_book
     puts 'Preserve the books'
     books_ojects = []
@@ -33,6 +34,7 @@ class App
     books
   end
 
+  # preserve person data into people.json file
   def preserve_person
     people_ojects = []
     @people.each do |people|
