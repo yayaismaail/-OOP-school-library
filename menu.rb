@@ -19,16 +19,15 @@ class Menu
       4 => :create_book,
       5 => :create_rental,
       6 => :list_rentals_for_person,
-      7 => :exit
+      7 => :exit_program
     }
 
     if menu.key?(option)
       app.send(menu[option])
-      return true if menu[option] == :exit
+      return true if menu[option] == :exit_program
     else
       puts 'Invalid option.'
     end
-
     false
   end
 end

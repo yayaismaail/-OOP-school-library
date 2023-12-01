@@ -1,7 +1,9 @@
 require './person'
 
 class Student < Person
-  def initialize(age, name, parent_permission, classroom)
+  attr_reader :classroom
+
+  def initialize(age, classroom, name = 'Unkown', parent_permission: true)
     super(age, name, parent_permission)
     @classroom = classroom
   end
@@ -9,6 +11,10 @@ class Student < Person
   def classroom=(classroom)
     @classroom = classroom
     @classroom.students.push(self) unless @classroom.students.include?(self)
+  end
+
+  def to_hash
+    super.merge(classroom: @classroom, class_name: 'Student')
   end
 
   def play_hooky
