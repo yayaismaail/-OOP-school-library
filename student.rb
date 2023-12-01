@@ -1,12 +1,10 @@
 require './person'
 
 class Student < Person
-  # atribute accessfor for the classromm
-  attr_accessor :parent_permission
   attr_reader :classroom
 
-  def initialize(age, name, _parent_permission, classroom = nil)
-    super(age, name)
+  def initialize(age, classroom, name = 'Unkown', parent_permission: true)
+    super(age, name, parent_permission:)
     @classroom = classroom
   end
 
@@ -16,7 +14,7 @@ class Student < Person
   end
 
   def to_hash
-    super.merge(class_name: 'Student')
+    super.merge(classroom: @classroom, class_name: 'Student')
   end
 
   def play_hooky

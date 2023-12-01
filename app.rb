@@ -45,13 +45,15 @@ class App
   end
 
   def create_student
-    puts 'Age:'
+    print 'Age:'
     age = gets.chomp
-    puts 'Name:'
+    print 'Classroom: '
+    classroom = gets.chomp
+    print 'Name:'
     name = gets.chomp
-    puts 'Has Parent Permission? [Y/N]:'
+    print 'Has Parent Permission? [Y/N]:'
     parent_permission = gets.chomp.downcase == 'y'
-    Student.new(age, name, parent_permission)
+    Student.new(age, classroom, name, parent_permission:)
   end
 
   def create_teacher
@@ -61,7 +63,7 @@ class App
     name = gets.chomp
     puts 'Specialization:'
     specialization = gets.chomp
-    Teacher.new(age, name, specialization)
+    Teacher.new(age, specialization, name)
   end
 
   def push_person_to_list(person)
@@ -122,8 +124,37 @@ class App
     @save_person.save_data(@people.map(&:to_hash))
   end
 
+  def load_people
+    person_data = @save_person.load_data
+    return nil if person_data.nil?
+
+    person_data.map do |person|
+      if person['class_name'] == 'Student'
+        Student.new(person['age'], person['classroom'], person['name'], parent_permission: person['parent_permission'])
+      elsif person['class_name'] == 'Teacher'
+        Teacher.new(person['age'], person['specialization'], person['name'])
+      end
+    end
+  end
+
   def save_rentals
     @save_rentals.save_data(@rentals.map(&:to_hash))
+  end
+
+  def load_rentals
+    rental_data = @save_rentals.load_data
+    return nil if rental_data.nil?
+
+    rental_data.map do |rental|
+      person_data = if rental['person']['class_name'] == 'Student'
+                      Student.new(rental['person']['age'], rental['person']['name'],
+                                  parent_permission: rental['person']['parent_permission'])
+                    elsif rental['person']['class_name'] == 'Teacher'
+                      Teacher.new(rental['person']['age'], rental['person']['specialization'], rental['person']['name'])
+                    end
+      book_data = Book.new(rental['book']['title'], rental['book']['author'])
+      Rental.new(rental['date'], book_data, person_data)
+    end
   end
 
   def exit_program
