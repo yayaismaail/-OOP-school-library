@@ -1,7 +1,7 @@
 require 'rspec'
-require_relative './rental'
-require_relative './book'
-require_relative './person'
+require_relative 'rental'
+require_relative 'book'
+require_relative 'person'
 
 describe Rental do
   let(:date) { '2023-01-01' }
