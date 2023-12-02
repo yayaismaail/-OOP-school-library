@@ -19,5 +19,15 @@ describe Classroom do
     end
   end
 
-  
+  describe '#add_student' do
+    it "adds a student to the classroom's students array" do
+      classroom.add_student(student1)
+      expect(classroom.students).to eq([student1])
+    end
+
+    it 'sets the classroom of the added student' do
+      classroom.add_student(student1)
+      expect(student1.classroom).to eq(classroom)
+    end
+  end
 end
