@@ -13,6 +13,10 @@ RSpec.describe Person do
         expect(person.age).to eq 25
         expect(person.id).not_to be_nil
       end
+
+      it 'creates a rentals array that is empty' do
+        expect(person.rentals).to be_empty
+      end
     end
 
     describe '#can_use_services?' do
