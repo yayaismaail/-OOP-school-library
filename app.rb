@@ -1,20 +1,83 @@
-require_relative 'storage'
-require_relative 'book'
-require_relative 'rental'
-require_relative 'person'
-require_relative 'student'
-require_relative 'teacher'
-require_relative 'menu'
-require_relative 'lister'
+require './book'
+require './rental'
+require './person'
+require './student'
+require './teacher'
+require './menu'
+require './lister'
+require 'json'
 
 class App
+  attr_accessor :books, :rentals, :people, :student, :teacher
+
   def initialize
-    @save_book = SaveData.new('data/book.json')
-    @save_person = SaveData.new('data/people.json')
-    @save_rentals = SaveData.new('data/rentals.json')
-    @books = load_books || []
-    @people = load_people || []
-    @rentals = load_rentals || []
+    r = Rentals.new
+    @books = add_books || []
+    @people = add_people || []
+    @rentals = r.add_rentals || []
+  end
+
+  def preseve_book
+    puts 'Preserve the books'
+    books_ojects = []
+    @books.each { |book| books_ojects << { title: book.title, author: book.author } }
+    File.write('books.json', books_ojects.to_json)
+  end
+
+  def add_books
+    books = []
+    if File.exist?('books.json') && !File.empty?('books.json')
+      data = JSON.parse(File.read('books.json'))
+      data.each { |book| books << Book.new(book['title'], book['author']) }
+    end
+    books
+  end
+
+  def preserve_person
+    people_ojects = []
+    @people.each do |people|
+      people_ojects << if people.instance_of?(::Student)
+                         { age: people.age, classroom: people.classroom, name: people.name, id: people.id,
+                           parent_permission: people.parent_permission, type: people.class.name }
+                       else
+                         { age: people.age, id: people.id, specialization: people.specialization, name: people.name,
+                           type: people.class.name }
+                       end
+    end
+    File.write('people.json', people_ojects.to_json)
+  end
+
+  def add_people
+    people = []
+    if File.exist?('people.json') && !File.empty?('people.json')
+      data = JSON.parse(File.read('people.json'))
+      data.each do |person|
+        if person['type'] == 'Student'
+          student = Student.new(person['age'], person['name'], person['classroom'])
+          student.id = person['id']
+          people << student
+        else
+          teacher = Teacher.new(person['age'], person['name'], person['specialization'])
+          teacher.id = person['id']
+          people << teacher
+        end
+      end
+    end
+    people
+  end
+
+  def preserve_rental
+    rental_objects = @rentals.map do |rental|
+      book_obj = { title: rental.book.title, author: rental.book.author }
+      person_data = { age: rental.person.age, name: rental.person.name, id: rental.person.id }
+      if rental.person.is_a?(Student)
+        person_data[:classroom] = rental.person.classroom
+      else
+        person_data[:specialization] = rental.person.specialization
+      end
+      { date: rental.date, book: book_obj, person: person_data }
+    end
+    File.write('rentals.json', rental_objects.to_json)
   end
 
   def list_books
@@ -36,6 +99,7 @@ class App
       return
     end
     push_person_to_list(person)
+    preserve_person
     puts 'Person created successfully'
   end
 
@@ -45,15 +109,13 @@ class App
   end
 
   def create_student
-    print 'Age:'
+    puts 'Age:'
     age = gets.chomp
-    print 'Classroom: '
-    classroom = gets.chomp
-    print 'Name:'
+    puts 'Name:'
     name = gets.chomp
-    print 'Has Parent Permission? [Y/N]:'
+    puts 'Has Parent Permission? [Y/N]:'
     parent_permission = gets.chomp.downcase == 'y'
-    Student.new(age, classroom, name, parent_permission)
+    Student.new(age, name, parent_permission)
   end
 
   def create_teacher
@@ -63,7 +125,7 @@ class App
     name = gets.chomp
     puts 'Specialization:'
     specialization = gets.chomp
-    Teacher.new(age, specialization, name)
+    Teacher.new(age, name, specialization)
   end
 
   def push_person_to_list(person)
@@ -77,6 +139,7 @@ class App
     author = gets.chomp
     book = Book.new(title, author)
     @books.push(book)
+    preseve_book
     puts 'Book created successfully'
   end
 
@@ -98,6 +161,7 @@ class App
 
     rental = Rental.new(date, @books[book], @people[person])
     @rentals.push(rental)
+    preserve_rental
     puts 'Rental created successfully'
   end
 
@@ -107,61 +171,6 @@ class App
     rentals = @rentals.select { |rental| rental.person.id == person_id }
     puts 'Rentals:'
     Lister.new(rentals).list_rentals
-  end
-
-  def save_book
-    @save_book.save_data(@books.map(&:to_hash))
-  end
-
-  def load_books
-    books_data = @save_book.load_data
-    return nil if books_data.nil?
-
-    books_data.map { |book| Book.new(book['title'], book['author']) }
-  end
-
-  def save_person
-    @save_person.save_data(@people.map(&:to_hash))
-  end
-
-  def load_people
-    person_data = @save_person.load_data
-    return nil if person_data.nil?
-
-    person_data.map do |person|
-      if person['class_name'] == 'Student'
-        Student.new(person['age'], person['classroom'], person['name'], parent_permission: person['parent_permission'])
-      elsif person['class_name'] == 'Teacher'
-        Teacher.new(person['age'], person['specialization'], person['name'])
-      end
-    end
-  end
-
-  def save_rentals
-    @save_rentals.save_data(@rentals.map(&:to_hash))
-  end
-
-  def load_rentals
-    rental_data = @save_rentals.load_data
-    return nil if rental_data.nil?
-
-    rental_data.map do |rental|
-      person_data = if rental['person']['class_name'] == 'Student'
-                      Student.new(rental['person']['age'], rental['person']['name'],
-                                  parent_permission: rental['person']['parent_permission'])
-                    elsif rental['person']['class_name'] == 'Teacher'
-                      Teacher.new(rental['person']['age'], rental['person']['specialization'], rental['person']['name'])
-                    end
-      book_data = Book.new(rental['book']['title'], rental['book']['author'])
-      Rental.new(rental['date'], book_data, person_data)
-    end
-  end
-
-  def exit_program
-    save_book
-    save_person
-    save_rentals
-    puts 'Thanks for using the application'
   end
 
   private :push_person_to_list, :create_teacher, :create_student, :person_type_input
