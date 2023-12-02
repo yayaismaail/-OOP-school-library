@@ -8,6 +8,7 @@ describe Classroom do
   let(:student2) { Student.new(23, 'Stu', false) }
   let(:classroom) { Classroom.new(classroom_label) }
 
+  # Describe initialization
   describe '#initialize' do
     it 'creates a new classroom with a label' do
       expect(classroom.label).to eq(classroom_label)
